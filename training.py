@@ -13,8 +13,8 @@ transform = torchvision.transforms.Compose(
     torchvision.transforms.Normalize((0.5,), (0.5,))]
 )
 
-training_dataset = torchvision.datasets.KMNIST(
-    root="./KMNIST",
+training_dataset = torchvision.datasets.MNIST(
+    root="./MNIST",
     train=True,
     download=True,
     transform=transform
@@ -29,7 +29,7 @@ loader = DataLoader(
 # model
 input_n = 28 * 28
 
-hidden_n = 4096
+hidden_n = 512
 output_n = 10
 activation = nn.LeakyReLU()
 
