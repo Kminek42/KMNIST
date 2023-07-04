@@ -37,20 +37,24 @@ model = nn.Sequential(
     activation,
     nn.AvgPool2d(kernel_size=(2, 2), stride=2),  # 14 * 14 * 16 
 
-    nn.Conv2d(in_channels=16, out_channels=16, kernel_size=(5, 5), padding="same"),
+    nn.Conv2d(in_channels=16, out_channels=32, kernel_size=(5, 5), padding="same"),  # 14 * 14 * 32
     activation,
-    nn.AvgPool2d(kernel_size=(2, 2), stride=2),  # 7 * 7 * 16 
+    nn.Conv2d(in_channels=32, out_channels=32, kernel_size=(5, 5), padding="same"),  # 14 * 14 * 32
+    activation,
+    nn.AvgPool2d(kernel_size=(2, 2), stride=2),  # 7 * 7 * 32 
 
     nn.Flatten(),
-    nn.Linear(7 * 7 * 16, 84),
+    nn.Linear(7 * 7 * 32, 512),
     activation,
-    nn.Linear(84, 10)
+    nn.Linear(512, 512),
+    activation,
+    nn.Linear(512, 10)
 ).to(dev)
 
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=5e-2, momentum=0.9)
 
-epoch_n = 20
+epoch_n = 10
 
 t0 = time.time()
 for epoch in range(1, epoch_n + 1):
