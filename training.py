@@ -10,11 +10,11 @@ print(f"Using {dev} device.")
 
 transform = torchvision.transforms.Compose(
     [torchvision.transforms.ToTensor(),
-    torchvision.transforms.Normalize((0.5,), (0.5,))]
+    torchvision.transforms.Normalize((0.0,), (1.0,))]
 )
 
-training_dataset = torchvision.datasets.MNIST(
-    root="./MNIST",
+training_dataset = torchvision.datasets.KMNIST(
+    root="./KMNIST",
     train=True,
     download=True,
     transform=transform
@@ -22,30 +22,34 @@ training_dataset = torchvision.datasets.MNIST(
 
 loader = DataLoader(
     dataset=training_dataset,
-    batch_size=128,
+    batch_size=256,
     shuffle=True
 )
 
 # model
-input_n = 28 * 28
-
-hidden_n = 512
-output_n = 10
 activation = nn.LeakyReLU()
 
 model = nn.Sequential(
+    # 28 * 28
+
+    nn.Conv2d(in_channels=1, out_channels=16, kernel_size=(5, 5), padding="same"),  # 28 * 28 * 16
+    activation,
+    nn.AvgPool2d(kernel_size=(2, 2), stride=2),  # 14 * 14 * 16 
+
+    nn.Conv2d(in_channels=16, out_channels=16, kernel_size=(5, 5), padding="same"),
+    activation,
+    nn.AvgPool2d(kernel_size=(2, 2), stride=2),  # 7 * 7 * 16 
+
     nn.Flatten(),
-    nn.Linear(input_n, hidden_n),
+    nn.Linear(7 * 7 * 16, 84),
     activation,
-    nn.Linear(hidden_n, hidden_n),
-    activation,
-    nn.Linear(hidden_n, output_n)
+    nn.Linear(84, 10)
 ).to(dev)
 
 criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.SGD(model.parameters(), lr=1e-2, momentum=0.9)
+optimizer = torch.optim.SGD(model.parameters(), lr=5e-2, momentum=0.9)
 
-epoch_n = 10
+epoch_n = 20
 
 t0 = time.time()
 for epoch in range(1, epoch_n + 1):
