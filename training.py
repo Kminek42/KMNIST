@@ -4,6 +4,7 @@ import torchvision
 from torch.utils.data import Dataset, DataLoader
 import matplotlib.pyplot as plt
 import time
+import learining_time_est as lte
 
 dev = torch.device("mps")
 print(f"Using {dev} device.")
@@ -65,10 +66,8 @@ for epoch in range(1, epoch_n + 1):
 
         loss_sum += loss
 
-    learning_time = time.time() - t0
-    remaining_time = learning_time / epoch * (epoch_n - epoch)
-    print(f"Epoch: {epoch}, mean loss: {loss_sum / len(loader)}")
-    print(f"Learning time: {time.time() - t0}, Time remaining: {remaining_time}\n")
+    print(f"\nEpoch: {epoch}, mean loss: {loss_sum / len(loader)}")
+    lte.show_time(start_timestamp=t0, progres=epoch/epoch_n)
 
 torch.save(obj=model, f="model.pt")
 print("Model saved.")
