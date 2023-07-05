@@ -73,5 +73,5 @@ for epoch in range(1, epoch_n + 1):
     print(f"\nEpoch: {epoch}, mean loss: {loss_sum / len(loader)}")
     lte.show_time(start_timestamp=t0, progres=epoch/epoch_n)
 
-torch.save(obj=model, f="model.pt")
+torch.save(obj=model.to("cpu"), f="model.pt")
 print("Model saved.")
