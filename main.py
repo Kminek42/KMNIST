@@ -17,7 +17,7 @@ def set_device(device_name):
         if torch.cuda.is_available():
             print("Using cuda")
             return torch.device("cuda")
-        
+
         else:
             print("Cuda not avaiable, using cpu instead")
             return torch.device("cpu")
@@ -27,7 +27,7 @@ def set_device(device_name):
         if torch.backends.mps.is_available():
             print("Using mps")
             return torch.device("mps")
-        
+
         else:
             print("MPS not avaiable, using cpu instead")
             return torch.device("cpu")
@@ -121,9 +121,9 @@ elif sys.argv[1] == "test":
             if torch.argmax(outputs[i]) == targets[i]:
                 good += 1
             all += 1
-        
-        print(all/10000)
-        
+
+        print(f"{all/100}%")
+
 
     print(f"Accuracy: {good / all}")
 
